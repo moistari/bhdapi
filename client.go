@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"strings"
@@ -13,6 +14,7 @@ import (
 
 type Client struct {
 	cl        *http.Client
+	AddRssKey bool
 	ApiKey    string
 	RssKey    string
 	Transport http.RoundTripper
@@ -38,7 +40,7 @@ func (cl *Client) Do(ctx context.Context, action string, params, result interfac
 	m := map[string]interface{}{
 		"action": action,
 	}
-	if cl.RssKey != "" {
+	if cl.AddRssKey && cl.RssKey != "" {
 		m["rsskey"] = cl.RssKey
 	}
 	v := reflect.ValueOf(params)
@@ -63,7 +65,7 @@ func (cl *Client) Do(ctx context.Context, action string, params, result interfac
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest("POST", base+cl.ApiKey, bytes.NewReader(buf))
+	req, err := http.NewRequest("POST", "https://beyond-hd.me/api/torrents/"+cl.ApiKey, bytes.NewReader(buf))
 	if err != nil {
 		return err
 	}
@@ -86,6 +88,52 @@ func (cl *Client) Search(ctx context.Context, query ...string) (*SearchResponse,
 	return Search(query...).Do(ctx, cl)
 }
 
+// Torrent retrieves a torrent for the id.
+func (cl *Client) Torrent(ctx context.Context, id int) ([]byte, error) {
+	if cl.RssKey == "" {
+		return nil, errors.New("must supply rss key")
+	}
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://beyond-hd.me/torrent/download/auto.%d.%s", id, cl.RssKey), nil)
+	if err != nil {
+		return nil, err
+	}
+	res, err := cl.cl.Do(req.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("invalid http status %d", res.StatusCode)
+	}
+	return ioutil.ReadAll(res.Body)
+}
+
+type Option func(cl *Client)
+
+func WithApiKey(apiKey string) Option {
+	return func(cl *Client) {
+		cl.ApiKey = apiKey
+	}
+}
+
+func WithRssKey(rssKey string) Option {
+	return func(cl *Client) {
+		cl.RssKey = rssKey
+	}
+}
+
+func WithAddRssKey(addRssKey bool) Option {
+	return func(cl *Client) {
+		cl.AddRssKey = addRssKey
+	}
+}
+
+func WithTransportKey(transport http.RoundTripper) Option {
+	return func(cl *Client) {
+		cl.Transport = transport
+	}
+}
+
 func val(v interface{}) (interface{}, bool, error) {
 	switch x := v.(type) {
 	case []string:
@@ -104,25 +152,3 @@ func val(v interface{}) (interface{}, bool, error) {
 	}
 	return "", false, fmt.Errorf("unknown type %T", v)
 }
-
-type Option func(cl *Client)
-
-func WithApiKey(apiKey string) Option {
-	return func(cl *Client) {
-		cl.ApiKey = apiKey
-	}
-}
-
-func WithRssKey(rssKey string) Option {
-	return func(cl *Client) {
-		cl.RssKey = rssKey
-	}
-}
-
-func WithTransportKey(transport http.RoundTripper) Option {
-	return func(cl *Client) {
-		cl.Transport = transport
-	}
-}
-
-const base = "https://beyond-hd.me/api/torrents/"
