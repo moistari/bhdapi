@@ -35,7 +35,7 @@ func buildClient() *Client {
 		opts = append(opts, WithApiKey(apiKey))
 	}
 	if rssKey := os.Getenv("RSSKEY"); rssKey != "" {
-		opts = append(opts, WithRssKey(rssKey))
+		opts = append(opts, WithRssKey(rssKey, false))
 	}
 	return New(opts...)
 }

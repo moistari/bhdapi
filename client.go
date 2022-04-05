@@ -116,19 +116,13 @@ func WithApiKey(apiKey string) Option {
 	}
 }
 
-func WithRssKey(rssKey string) Option {
+func WithRssKey(rssKey string, addRssKey bool) Option {
 	return func(cl *Client) {
-		cl.RssKey = rssKey
+		cl.RssKey, cl.AddRssKey = rssKey, addRssKey
 	}
 }
 
-func WithAddRssKey(addRssKey bool) Option {
-	return func(cl *Client) {
-		cl.AddRssKey = addRssKey
-	}
-}
-
-func WithTransportKey(transport http.RoundTripper) Option {
+func WithTransport(transport http.RoundTripper) Option {
 	return func(cl *Client) {
 		cl.Transport = transport
 	}
