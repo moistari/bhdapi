@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+// Client is a BHD client.
 type Client struct {
 	cl        *http.Client
 	AddRssKey bool
@@ -20,6 +21,7 @@ type Client struct {
 	Transport http.RoundTripper
 }
 
+// New creates a new BHD client.
 func New(opts ...Option) *Client {
 	cl := &Client{}
 	for _, o := range opts {
@@ -33,6 +35,7 @@ func New(opts ...Option) *Client {
 	return cl
 }
 
+// Do executes the action and params, decoding the result.
 func (cl *Client) Do(ctx context.Context, action string, params, result interface{}) error {
 	if cl.ApiKey == "" {
 		return errors.New("must supply api key")
@@ -108,26 +111,31 @@ func (cl *Client) Torrent(ctx context.Context, id int) ([]byte, error) {
 	return ioutil.ReadAll(res.Body)
 }
 
+// Option is a BHD client option.
 type Option func(cl *Client)
 
+// WithApiKey is a client option to set the api key.
 func WithApiKey(apiKey string) Option {
 	return func(cl *Client) {
 		cl.ApiKey = apiKey
 	}
 }
 
+// WithApiKey is a client option to set the rss key.
 func WithRssKey(rssKey string, addRssKey bool) Option {
 	return func(cl *Client) {
 		cl.RssKey, cl.AddRssKey = rssKey, addRssKey
 	}
 }
 
+// WithTransport is a client option to set the http transport used.
 func WithTransport(transport http.RoundTripper) Option {
 	return func(cl *Client) {
 		cl.Transport = transport
 	}
 }
 
+// val encodes v as necessary, returning whether or not it is the zero value.
 func val(v interface{}) (interface{}, bool, error) {
 	switch x := v.(type) {
 	case []string:

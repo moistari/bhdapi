@@ -116,257 +116,308 @@ type SearchRequest struct {
 	Page int `json:"page,omitempty"`
 }
 
+// Search creates a new search request.
 func Search(query ...string) *SearchRequest {
 	return &SearchRequest{
 		Search: strings.Join(query, " "),
 	}
 }
 
+// WithInfoHash sets the search info hash value.
 func (req SearchRequest) WithInfoHash(infoHash string) *SearchRequest {
 	req.InfoHash = infoHash
 	return &req
 }
 
+// WithFolderName sets the search folder name value.
 func (req SearchRequest) WithFolderName(folderName string) *SearchRequest {
 	req.FolderName = folderName
 	return &req
 }
 
+// WithFileName sets the search file name value.
 func (req SearchRequest) WithFileName(fileName string) *SearchRequest {
 	req.FileName = fileName
 	return &req
 }
 
+// WithSize sets the search size value.
 func (req SearchRequest) WithSize(size int64) *SearchRequest {
 	req.Size = size
 	return &req
 }
 
+// WithUploadedBy sets the search uploaded by value.
 func (req SearchRequest) WithUploadedBy(uploadedBy string) *SearchRequest {
 	req.UploadedBy = uploadedBy
 	return &req
 }
 
+// WithImdbID sets the search imdb id value.
 func (req SearchRequest) WithImdbID(imdbID string) *SearchRequest {
 	req.ImdbID = imdbID
 	return &req
 }
 
+// WithTmdbID sets the search tmdb id value.
 func (req SearchRequest) WithTmdbID(tmdbID string) *SearchRequest {
 	req.TmdbID = tmdbID
 	return &req
 }
 
+// WithCategories sets the search categories.
 func (req SearchRequest) WithCategories(categories ...string) *SearchRequest {
 	req.Categories = categories
 	return &req
 }
 
+// WithTypes sets the search types.
 func (req SearchRequest) WithTypes(types ...string) *SearchRequest {
 	req.Types = types
 	return &req
 }
 
+// WithSources sets the search sources.
 func (req SearchRequest) WithSources(sources ...string) *SearchRequest {
 	req.Sources = sources
 	return &req
 }
 
+// WithGenres sets the search genres.
 func (req SearchRequest) WithGenres(genres ...string) *SearchRequest {
 	req.Genres = genres
 	return &req
 }
 
+// WithGroups sets the search groups.
 func (req SearchRequest) WithGroups(groups ...string) *SearchRequest {
 	req.Groups = groups
 	return &req
 }
 
+// WithFreeleech sets the search freeleech.
 func (req SearchRequest) WithFreeleech(freeleech bool) *SearchRequest {
 	req.Freeleech = Bool(freeleech)
 	return &req
 }
 
+// WithLimited sets the search limited.
 func (req SearchRequest) WithLimited(limited bool) *SearchRequest {
 	req.Limited = Bool(limited)
 	return &req
 }
 
+// WithPromo25 sets the search promo25.
 func (req SearchRequest) WithPromo25(promo25 bool) *SearchRequest {
 	req.Promo25 = Bool(promo25)
 	return &req
 }
 
+// WithPromo50 sets the search promo50.
 func (req SearchRequest) WithPromo50(promo50 bool) *SearchRequest {
 	req.Promo50 = Bool(promo50)
 	return &req
 }
 
+// WithPromo75 sets the search promo75.
 func (req SearchRequest) WithPromo75(promo75 bool) *SearchRequest {
 	req.Promo75 = Bool(promo75)
 	return &req
 }
 
+// WithRefund sets the search refund.
 func (req SearchRequest) WithRefund(refund bool) *SearchRequest {
 	req.Refund = Bool(refund)
 	return &req
 }
 
+// WithRescue sets the search rescue.
 func (req SearchRequest) WithRescue(rescue bool) *SearchRequest {
 	req.Rescue = Bool(rescue)
 	return &req
 }
 
+// WithRewind sets the search rewind.
 func (req SearchRequest) WithRewind(rewind bool) *SearchRequest {
 	req.Rewind = Bool(rewind)
 	return &req
 }
 
+// WithStream sets the search stream.
 func (req SearchRequest) WithStream(stream bool) *SearchRequest {
 	req.Stream = Bool(stream)
 	return &req
 }
 
+// WithSd sets the search sd.
 func (req SearchRequest) WithSD(sd bool) *SearchRequest {
 	req.SD = Bool(sd)
 	return &req
 }
 
+// WithPack sets the search pack.
 func (req SearchRequest) WithPack(pack bool) *SearchRequest {
 	req.Pack = Bool(pack)
 	return &req
 }
 
+// WithH264 sets the search h264.
 func (req SearchRequest) WithH264(h264 bool) *SearchRequest {
 	req.H264 = Bool(h264)
 	return &req
 }
 
+// WithH265 sets the search h265.
 func (req SearchRequest) WithH265(h265 bool) *SearchRequest {
 	req.H265 = Bool(h265)
 	return &req
 }
 
+// WithFeatures sets the search features.
 func (req SearchRequest) WithFeatures(features ...string) *SearchRequest {
 	req.Features = features
 	return &req
 }
 
+// WithAlive sets the search alive.
 func (req SearchRequest) WithAlive(alive bool) *SearchRequest {
 	req.Alive = Bool(alive)
 	return &req
 }
 
+// WithDying sets the search dying.
 func (req SearchRequest) WithDying(dying bool) *SearchRequest {
 	req.Dying = Bool(dying)
 	return &req
 }
 
+// WithDead sets the search dead.
 func (req SearchRequest) WithDead(dead bool) *SearchRequest {
 	req.Dead = Bool(dead)
 	return &req
 }
 
+// WithReseed sets the search reseed.
 func (req SearchRequest) WithReseed(reseed bool) *SearchRequest {
 	req.Reseed = Bool(reseed)
 	return &req
 }
 
+// WithSeeding sets the search seeding.
 func (req SearchRequest) WithSeeding(seeding bool) *SearchRequest {
 	req.Seeding = Bool(seeding)
 	return &req
 }
 
+// WithLeeching sets the search leeching.
 func (req SearchRequest) WithLeeching(leeching bool) *SearchRequest {
 	req.Leeching = Bool(leeching)
 	return &req
 }
 
+// WithCompleted sets the search completed.
 func (req SearchRequest) WithCompleted(completed bool) *SearchRequest {
 	req.Completed = Bool(completed)
 	return &req
 }
 
+// WithIncomplete sets the search incomplete.
 func (req SearchRequest) WithIncomplete(incomplete bool) *SearchRequest {
 	req.Incomplete = Bool(incomplete)
 	return &req
 }
 
+// WithNotDownloaded sets the search not downloaded.
 func (req SearchRequest) WithNotDownloaded(notDownloaded bool) *SearchRequest {
 	req.NotDownloaded = Bool(notDownloaded)
 	return &req
 }
 
+// WithMinBHD sets the search min BHD value.
 func (req SearchRequest) WithMinBHD(minBHD int) *SearchRequest {
 	req.MinBHD = minBHD
 	return &req
 }
 
+// WithVoteBHD sets the search vote BHD value.
 func (req SearchRequest) WithVoteBHD(voteBHD int) *SearchRequest {
 	req.VoteBHD = voteBHD
 	return &req
 }
 
+// WithMinImdb sets the search min imdb.
 func (req SearchRequest) WithMinImdb(minImdb int) *SearchRequest {
 	req.MinImdb = minImdb
 	return &req
 }
 
+// WithVoteImdb sets the search vote imdb.
 func (req SearchRequest) WithVoteImdb(voteImdb int) *SearchRequest {
 	req.VoteImdb = voteImdb
 	return &req
 }
 
+// WithMinTmbd sets the search min tmbd.
 func (req SearchRequest) WithMinTmbd(minTmbd int) *SearchRequest {
 	req.MinTmbd = minTmbd
 	return &req
 }
 
+// WithVoteTmbd sets the search vote tmbd.
 func (req SearchRequest) WithVoteTmbd(voteTmbd int) *SearchRequest {
 	req.VoteTmbd = voteTmbd
 	return &req
 }
 
+// WithMinYear sets the search min year.
 func (req SearchRequest) WithMinYear(minYear int) *SearchRequest {
 	req.MinYear = minYear
 	return &req
 }
 
+// WithMaxYear sets the search max year.
 func (req SearchRequest) WithMaxYear(maxYear int) *SearchRequest {
 	req.MaxYear = maxYear
 	return &req
 }
 
+// WithCountries sets the search countries.
 func (req SearchRequest) WithCountries(countries ...string) *SearchRequest {
 	req.Countries = countries
 	return &req
 }
 
+// WithLanguages sets the search languages.
 func (req SearchRequest) WithLanguages(languages ...string) *SearchRequest {
 	req.Languages = languages
 	return &req
 }
 
+// WithAudios sets the search audios.
 func (req SearchRequest) WithAudios(audios ...string) *SearchRequest {
 	req.Audios = audios
 	return &req
 }
 
+// WithSubtitles sets the search subtitles.
 func (req SearchRequest) WithSubtitles(subtitles ...string) *SearchRequest {
 	req.Subtitles = subtitles
 	return &req
 }
 
+// WithSort sets the search sort.
 func (req SearchRequest) WithSort(sort string) *SearchRequest {
 	req.Sort = sort
 	return &req
 }
 
+// WithOrder sets the search order.
 func (req SearchRequest) WithOrder(order string) *SearchRequest {
 	req.Order = order
 	return &req
 }
 
+// WithPage sets the search page.
 func (req SearchRequest) WithPage(page int) *SearchRequest {
 	req.Page = page
 	return &req
@@ -467,8 +518,10 @@ type SearchResult struct {
 	DownloadURL string `json:"download_url,omitempty"`
 }
 
+// Bool is a bool type.
 type Bool bool
 
+// String satisfies the fmt.Stringer interface.
 func (b Bool) String() string {
 	if b {
 		return "1"
@@ -476,6 +529,7 @@ func (b Bool) String() string {
 	return "0"
 }
 
+// Int returns the bool as an int.
 func (b Bool) Int() int {
 	if b {
 		return 1
@@ -483,10 +537,12 @@ func (b Bool) Int() int {
 	return 0
 }
 
+// MarshalJSON satisfies the json.Marshaler interface.
 func (b Bool) MarshalJSON() ([]byte, error) {
 	return []byte(b.String()), nil
 }
 
+// UnmarshalJSON satisfies the json.Unmarshaler interface.
 func (b *Bool) UnmarshalJSON(buf []byte) error {
 	switch string(bytes.ToLower(buf)) {
 	case "true", "1":
@@ -499,16 +555,20 @@ func (b *Bool) UnmarshalJSON(buf []byte) error {
 	return fmt.Errorf("invalid bool value %q", buf)
 }
 
+// Time is a time value.
 type Time time.Time
 
+// String satisfies the fmt.Stringer interface.
 func (t Time) String() string {
 	return time.Time(t).Format(timefmt)
 }
 
+// MarshalJSON satisfies the json.Marshaler interface.
 func (t Time) MarshalJSON() ([]byte, error) {
 	return []byte("\"" + t.String() + "\""), nil
 }
 
+// UnmarshalJSON satisfies the json.Unmarshaler interface.
 func (t *Time) UnmarshalJSON(buf []byte) error {
 	if len(buf) < 2 {
 		return errors.New("invalid time value")
@@ -521,4 +581,5 @@ func (t *Time) UnmarshalJSON(buf []byte) error {
 	return nil
 }
 
+// timefmt is the time format used for parsing and display time values.
 const timefmt = "2006-01-02 15:04:05"
