@@ -445,7 +445,7 @@ type SearchResponse struct {
 	// The current page of results that you're on.
 	Page int `json:"page,omitempty"`
 	// The results that match your query.
-	Results []SearchResult `json:"results,omitempty"`
+	Results []Torrent `json:"results,omitempty"`
 	// The total number of pages of results matching your query.
 	TotalPages int `json:"total_pages,omitempty"`
 	// The total number of results matching your query.
@@ -456,8 +456,8 @@ type SearchResponse struct {
 	StatusMessage string `json:"status_message,omitempty"`
 }
 
-// SearchResult is a bhd search result.
-type SearchResult struct {
+// Torrent is a bhd torrent.
+type Torrent struct {
 	// The BHD ID.
 	ID int `json:"id,omitempty"`
 	// The name.
