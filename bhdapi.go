@@ -508,6 +508,18 @@ type Torrent struct {
 	Limited Bool `json:"limited,omitempty"`
 	// The torrent rescue promo.
 	Rescue Bool `json:"rescue,omitempty"`
+	// DV is dolby vision feature.
+	DV Bool `json:"dv,omitempty"`
+	// HDR10 is HDR10 feature.
+	HDR10 Bool `json:"hdr10,omitempty"`
+	// HDR10P is HDR10+ feature.
+	HDR10P Bool `json:"hdr10+,omitempty"`
+	// HLG is HLG feature.
+	HLG Bool `json:"hlg,omitempty"`
+	// Commentary is commentary feature.
+	Commentary Bool `json:"commentary,omitempty"`
+	// Internal is internal feature.
+	Internal Bool `json:"internal,omitempty"`
 	// The bumped at time.
 	BumpedAt Time `json:"bumped_at,omitempty"`
 	// The created at time.
