@@ -568,11 +568,13 @@ func (b *Bool) UnmarshalJSON(buf []byte) error {
 }
 
 // Time is a time value.
-type Time time.Time
+type Time struct {
+	time.Time
+}
 
 // String satisfies the fmt.Stringer interface.
 func (t Time) String() string {
-	return time.Time(t).Format(timefmt)
+	return time.Time(t.Time).Format(timefmt)
 }
 
 // MarshalJSON satisfies the json.Marshaler interface.
@@ -589,7 +591,7 @@ func (t *Time) UnmarshalJSON(buf []byte) error {
 	if err != nil {
 		return err
 	}
-	*t = Time(v)
+	t.Time = v
 	return nil
 }
 
