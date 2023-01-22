@@ -503,6 +503,18 @@ func (req *SearchRequest) Err() error {
 	return req.err
 }
 
+// All returns all results for the search request.
+func (req *SearchRequest) All(ctx context.Context, cl *Client) ([]Torrent, error) {
+	var torrents []Torrent
+	for req.Next(ctx, cl) {
+		torrents = append(torrents, req.Cur())
+	}
+	if err := req.Err(); err != nil {
+		return nil, err
+	}
+	return torrents, nil
+}
+
 // SearchResponse is a bhd search response.
 type SearchResponse struct {
 	// The status code of the post request. (0 = Failed and 1 = Success)
