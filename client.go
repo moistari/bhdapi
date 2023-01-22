@@ -46,7 +46,7 @@ func (cl *Client) Do(ctx context.Context, action string, params, result interfac
 	if cl.AddRssKey && cl.RssKey != "" {
 		m["rsskey"] = cl.RssKey
 	}
-	v := reflect.ValueOf(params)
+	v := reflect.ValueOf(params).Elem()
 	if v.Kind() != reflect.Struct {
 		return errors.New("must past a pointer to a struct")
 	}

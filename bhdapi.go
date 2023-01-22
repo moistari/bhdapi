@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -114,12 +115,21 @@ type SearchRequest struct {
 	Order string `json:"order,omitempty"`
 	// The page number of the results. Only if the result set has more than 100 total matches.
 	Page int `json:"page,omitempty"`
+
+	res *SearchResponse
+	i   int
+	p   int
+	err error
+	mu  sync.Mutex
 }
 
 // Search creates a new search request.
 func Search(query ...string) *SearchRequest {
 	return &SearchRequest{
 		Search: strings.Join(query, " "),
+		Page:   1,
+		p:      -1,
+		i:      -1,
 	}
 }
 
@@ -424,7 +434,7 @@ func (req SearchRequest) WithPage(page int) *SearchRequest {
 }
 
 // Do executes the search request against the client.
-func (req SearchRequest) Do(ctx context.Context, cl *Client) (*SearchResponse, error) {
+func (req *SearchRequest) Do(ctx context.Context, cl *Client) (*SearchResponse, error) {
 	res := new(SearchResponse)
 	if err := cl.Do(ctx, "search", req, res); err != nil {
 		return nil, err
@@ -436,6 +446,61 @@ func (req SearchRequest) Do(ctx context.Context, cl *Client) (*SearchResponse, e
 		return nil, errors.New("success != true")
 	}
 	return res, nil
+}
+
+// Next returns true if there are search results available for the request.
+//
+// Example:
+//
+//	req := bhdapi.Search()
+//	for req.Next(ctx, cl) {
+//		torrent := req.NextTorrent()
+//		/* ... */
+//	}
+//	if err := req.Err(); err != nil {
+//		/* ... */
+//	}
+func (req *SearchRequest) Next(ctx context.Context, cl *Client) bool {
+	req.mu.Lock()
+	defer req.mu.Unlock()
+	page := req.Page
+	if page == 0 {
+		page = 1
+	}
+	switch {
+	case req.err != nil:
+		return false
+	case req.res != nil:
+		switch {
+		case req.i < len(req.res.Results)-1:
+			req.i++
+			return true
+		case page+req.p >= req.res.TotalPages:
+			return false
+		}
+	}
+	req.p, req.i = req.p+1, 0
+	req.res, req.err = req.WithPage(page+req.p).Do(ctx, cl)
+	return req.err == nil && req.i < len(req.res.Results)
+}
+
+// Cur returns the search response cursor's current torrent. Returns the same
+// value until Next is called. Panics if called prior to Next.
+//
+// See Next for an overview of using this method.
+func (req *SearchRequest) Cur() Torrent {
+	req.mu.Lock()
+	defer req.mu.Unlock()
+	return req.res.Results[req.i]
+}
+
+// Err returns the last error in the search response.
+//
+// See Next for an overview of using this method.
+func (req *SearchRequest) Err() error {
+	req.mu.Lock()
+	defer req.mu.Unlock()
+	return req.err
 }
 
 // SearchResponse is a bhd search response.

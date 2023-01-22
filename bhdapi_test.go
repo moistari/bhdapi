@@ -13,8 +13,27 @@ func TestSearch(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected no error, got: %v", err)
 	}
-	for i, r := range res.Results {
-		t.Logf("%02d: %s %d %q", i, r.InfoHash, r.ID, r.Name)
+	for i, torrent := range res.Results {
+		t.Logf("%02d: %s %d %q", i, torrent.InfoHash, torrent.ID, torrent.Name)
+	}
+}
+
+func TestNext(t *testing.T) {
+	cl := buildClient()
+	req := Search("framestor remux 1080p 2022").
+		WithSort("created_at").
+		WithOrder("asc")
+	var torrents []Torrent
+	for req.Next(context.Background(), cl) {
+		torrent := req.Cur()
+		torrents = append(torrents, torrent)
+		t.Logf("%d %02d: %s %d %q", req.Page+req.p-1, req.i, torrent.InfoHash, torrent.ID, torrent.Name)
+	}
+	if err := req.Err(); err != nil {
+		t.Fatalf("expected no error, got: %v", err)
+	}
+	if n, exp := len(torrents), 200; n < exp {
+		t.Errorf("expected at least %d results, got: %d", exp, n)
 	}
 }
 
