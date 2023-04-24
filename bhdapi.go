@@ -454,7 +454,7 @@ func (req *SearchRequest) Do(ctx context.Context, cl *Client) (*SearchResponse, 
 //
 //	req := bhdapi.Search()
 //	for req.Next(ctx, cl) {
-//		torrent := req.NextTorrent()
+//		torrent := req.Cur()
 //		/* ... */
 //	}
 //	if err := req.Err(); err != nil {
@@ -492,6 +492,11 @@ func (req *SearchRequest) Cur() Torrent {
 	req.mu.Lock()
 	defer req.mu.Unlock()
 	return req.res.Results[req.i]
+}
+
+// PageIndex returns the search response cursor page and index.
+func (req *SearchRequest) PageIndex() (int, int) {
+	return req.p, req.i
 }
 
 // Err returns the last error in the search response.
